@@ -26,22 +26,34 @@ Flight::set('link', $link);
 
 // Route page d'accueil carte
 
-Flight::route('/carte_villes', function() {
+Flight::route('/', function() {
     Flight::render('carte_villes');
 });
 
-// Route /Autocomplétion AJAX
+// Route completion 3 types 
 
 Flight::route('/villes', function () {
     $link = Flight::get('link');
+    $recherche = $_GET['recherche'] ?? ''; 
+    $type = $_GET['type'] ?? 'contient';
 
-    $recherche = $_GET['recherche']; 
+    if ($type === 'commence') {
+        $like = $recherche . '%';
+    } elseif ($type === 'finit') {
+        $like = '%' . $recherche;
+    } else {
+        $like = '%' . $recherche . '%';
+    }        
 
-    $sql = "SELECT nom, insee FROM communes WHERE nom LIKE '$recherche%' LIMIT 10";
-    $requete = mysqli_query($link, $sql);
+    $stmt = mysqli_prepare($link, "SELECT nom, insee FROM communes WHERE nom LIKE ? LIMIT 10");
+    mysqli_stmt_bind_param($stmt, "s", $like);
+    mysqli_stmt_execute($stmt);
+    $requete = mysqli_stmt_get_result($stmt);
+    
     $villes = [];
-    foreach ($requete as $ville)
+    foreach ($requete as $ville) {
         $villes[] = $ville;
+    }
 
        Flight::json($villes);
 });
