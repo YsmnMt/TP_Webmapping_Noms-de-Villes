@@ -5,10 +5,6 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
-setTimeout(() => {
-    map.invalidateSize();
-}, 100);
-
 let marqueurs = L.geoJson().addTo(map);
 
 
@@ -47,7 +43,7 @@ Vue.createApp({
                     }
 
                 donnees.forEach(ville => {
-                    let circle = L.circle([ville.lat, ville.lon])
+                    let circle = L.circle([ville.lat, ville.lon], {radius : 500})
                     .bindPopup(ville.nom)
                     .addTo(marqueurs)
                 });
