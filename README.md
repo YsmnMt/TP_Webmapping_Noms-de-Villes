@@ -20,7 +20,7 @@ Une liste des villes correspondant à sa recherche se déroule, et lorsqu'une de
 ### Fonctionnalités 
 
 - Une barre de recherche.
-- Un bouton qui compte en son sein trois paramètres prédéfinies pour votre requête : commence par, contient, finit par.
+- Un menu déroulant qui permet de choisir entre trois types de recherche : commence par, contient, finit par.
 - Une liste déroulante des villes correspondant à la recherche, à partir de laquelle l'utilisateur peut sélectionner la ville de son choix.
 - Une carte fournie par les services de Leaflet qui permet de visualiser les villes sélectionnées.
 
