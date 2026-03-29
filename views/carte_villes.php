@@ -37,7 +37,7 @@
                 <option value="finit">Finit par</option>
             </select>
         </form>
-        <div>
+        <div id="button-villes">
             <button @click.prevent="type='commence'; recherche='Y'; geocode()">Commence par Y</button>
             <button @click.prevent="type='contient'; recherche='z'; geocode()">Contient un Z</button>
             <button @click.prevent="type='commence'; recherche='anne'; geocode()">Commence par Anne</button>

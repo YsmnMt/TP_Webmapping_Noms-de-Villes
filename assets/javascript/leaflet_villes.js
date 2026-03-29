@@ -1,4 +1,4 @@
-let map = L.map('map').setView([48.85, 2.35], 13);
+let map = L.map('map').setView([46.5, 2.5], 6);
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -47,6 +47,13 @@ Vue.createApp({
                     .bindPopup(ville.nom)
                     .addTo(marqueurs)
                 });
+
+                //Implémentation d'un barycentre 
+
+                let latMoyen = donnees.reduce((moy, ville) => moy + parseFloat(ville.lat), 0)/donnees.length;
+                let lonMoyen = donnees.reduce((moy, ville) => moy + parseFloat(ville.lon), 0)/donnees.length;
+
+                L.marker([latMoyen, lonMoyen]).bindPopup('Barycentre').addTo(marqueurs);
 
                 let bounds = marqueurs.getBounds();
                 map.fitBounds(bounds);

@@ -48,7 +48,7 @@ Flight::route('/villes', function () {
     $stmt = mysqli_prepare($link, "SELECT nom, insee, 
     ST_X(ST_GeomFromText(ST_AsText(ST_Centroid(geometry)), 4326)) AS lon,
     ST_Y(ST_GeomFromText(ST_AsText(ST_Centroid(geometry)), 4326)) AS lat
-    FROM communes WHERE nom LIKE ? LIMIT 10");
+    FROM communes WHERE nom LIKE ? LIMIT 100");
     mysqli_stmt_bind_param($stmt, "s", $like);
     mysqli_stmt_execute($stmt);
     $requete = mysqli_stmt_get_result($stmt);
