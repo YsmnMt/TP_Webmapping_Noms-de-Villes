@@ -45,6 +45,7 @@ Vue.createApp({
                 donnees.forEach(ville => {
                     let circle = L.circle([ville.lat, ville.lon], {radius : 500})
                     .bindPopup(ville.nom)
+                    .on('click', function() { map.setView(this.getLatLng(), 15) })
                     .addTo(marqueurs)
                 });
 
@@ -68,6 +69,11 @@ Vue.createApp({
             console.log(this.recherche);
 
             let url ='/villes?recherche=' + this.recherche + '&type=' + this.type;
+
+            if(!this.recherche) {
+                this.villes = [];
+                return;
+            };
 
             fetch(url)
                 .then(result => result.json())

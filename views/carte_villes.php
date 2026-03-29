@@ -27,7 +27,7 @@
                 >
             <button class="btn btn-primary">Recherche</button>
             <ul id="villes" v-if="villes.length">
-                <li v-for="ville in villes" @click= "recherche = ville.nom">
+                <li v-for="ville in villes" @click= "recherche = ville.nom; villes = []">
                     {{ ville.nom }}
                 </li>
             </ul>
