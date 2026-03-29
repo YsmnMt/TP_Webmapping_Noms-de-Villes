@@ -27,11 +27,16 @@
                 >
             <button class="btn btn-primary">Recherche</button>
             <ul id="villes" v-if="villes.length">
-                <li v-for="ville in villes" >
+                <li v-for="ville in villes" @click= "recherche = ville.nom">
                     {{ ville.nom }}
                 </li>
             </ul>
-            </form>
+            <select v-model="type">
+                <option value="contient">Contient</option>
+                <option value="commence">Commence par</option>
+                <option value="finit">Finit par</option>
+            </select>
+        </form>
     </div>
     <div id="map"></div>
 </div>

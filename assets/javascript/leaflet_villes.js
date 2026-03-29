@@ -5,25 +5,11 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
-/* Marqueur, cercle et polygone 
-let marker = L.marker([48.85, 2.35]).addTo(map);
+setTimeout(() => {
+    map.invalidateSize();
+}, 100);
 
-let circle = L.circle([48.85, 2.35], {
-    color: 'red',
-    fillColor: '#f03',
-    fillOpacity: 0.5,
-    radius: 500
-}).addTo(map);
-
-let polygon = L.polygon([
-    [48.85, 2.35],
-    [48.86, 2.37],
-    [48.84, 2.33]
-]).addTo(map);
-
-*/
-
-let geoJsonLayer = L.geoJSON().addTo(map);
+let marqueurs = L.geoJson().addTo(map);
 
 
 Vue.createApp({
@@ -31,7 +17,8 @@ Vue.createApp({
         return {
             recherche: '',
             donnees: [],
-            villes: []
+            villes: [],
+            type: 'contient'
         };
     },
 
@@ -45,26 +32,28 @@ Vue.createApp({
 
             console.log(this.recherche);
 
-            let url = this.recherche;
+            let url = '/villes?recherche=' + this.recherche + '&type=' + this.type;
 
-            fetch(`https://data.geopf.fr/geocodage/search?q=${url}`)
+            fetch(url)
                 .then(result => result.json())
                 .then(donnees => {
                     console.log(donnees);
 
-                    /* Version prof
+                    marqueurs.clearLayers();
 
-                    L.geoJSON(donnees).bindPopup(function (layer) {
-                        return layer.feature.properties;
-                    }).addTo(map);
+                    if (donnees.length === 0) {
+                        alert('Aucune ville trouvée pour votre recherche.');
+                        return;
+                    }
 
-                    */
+                donnees.forEach(ville => {
+                    let circle = L.circle([ville.lat, ville.lon])
+                    .bindPopup(ville.nom)
+                    .addTo(marqueurs)
+                });
 
-                    geoJsonLayer.clearLayers();
-                    geoJsonLayer.addData(donnees);
-
-                    let bounds = geoJsonLayer.getBounds();
-                    map.fitBounds(bounds);
+                let bounds = marqueurs.getBounds();
+                map.fitBounds(bounds);
             })
 
             .catch(error => {
@@ -75,7 +64,7 @@ Vue.createApp({
         autocomplete() {
             console.log(this.recherche);
 
-            let url ='/villes?recherche=' + this.recherche;
+            let url ='/villes?recherche=' + this.recherche + '&type=' + this.type;
 
             fetch(url)
                 .then(result => result.json())
@@ -84,7 +73,6 @@ Vue.createApp({
                 });
 
         }
-        
     }
 
 }).mount('#entete');

@@ -45,11 +45,15 @@ Flight::route('/villes', function () {
         $like = '%' . $recherche . '%';
     }        
 
-    $stmt = mysqli_prepare($link, "SELECT nom, insee FROM communes WHERE nom LIKE ? LIMIT 10");
+    $stmt = mysqli_prepare($link, "SELECT nom, insee, 
+    ST_X(ST_GeomFromText(ST_AsText(ST_Centroid(geometry)), 4326)) AS lon,
+    ST_Y(ST_GeomFromText(ST_AsText(ST_Centroid(geometry)), 4326)) AS lat
+    FROM communes WHERE nom LIKE ? LIMIT 10");
     mysqli_stmt_bind_param($stmt, "s", $like);
     mysqli_stmt_execute($stmt);
     $requete = mysqli_stmt_get_result($stmt);
     
+
     $villes = [];
     foreach ($requete as $ville) {
         $villes[] = $ville;
