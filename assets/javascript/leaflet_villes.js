@@ -45,7 +45,7 @@ Vue.createApp({
                 donnees.forEach(ville => {
                     let circle = L.circle([ville.lat, ville.lon], {radius : 500})
                     .bindPopup(ville.nom)
-                    .on('click', function() { map.setView(this.getLatLng(), 15) })
+                    .on('click', function() { map.setView(this.getLatLng(), 10) })
                     .addTo(marqueurs)
                 });
 
@@ -56,13 +56,30 @@ Vue.createApp({
 
                 L.marker([latMoyen, lonMoyen]).bindPopup('Barycentre').addTo(marqueurs);
 
-                let bounds = marqueurs.getBounds();
-                map.fitBounds(bounds);
+                if (donnees.length === 1) {
+                    map.setView([parseFloat(donnees[0].lat), parseFloat(donnees[0].lon)], 10);
+                } else {
+                    map.fitBounds(marqueurs.getBounds());
+                }
+
             })
 
             .catch(error => {
                 console.error('Erreur:', error);
             });
+        },
+
+        selectionVille(ville) {
+            this.recherche = ville.nom;
+            this.villes = [];
+            marqueurs.clearLayers();
+
+            let circle = L.circle([parseFloat(ville.lat), parseFloat(ville.lon)], { radius: 500 })
+                .bindPopup(ville.nom)
+                .addTo(marqueurs);
+
+            map.setView([parseFloat(ville.lat), parseFloat(ville.lon)], 15);
+            circle.openPopup();
         },
 
         autocomplete() {
