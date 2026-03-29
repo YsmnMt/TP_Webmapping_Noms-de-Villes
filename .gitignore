@@ -1,0 +1,7 @@
+.DS_Store 
+*.log 
+geobase.sql 
+.env 
+*.local.php 
+uploads/
+cache/
